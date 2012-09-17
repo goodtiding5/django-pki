@@ -524,7 +524,7 @@ class CertificateAuthority(CertificateBase):
     class Meta:
         db_table = 'pki_certificateauthority'
         verbose_name_plural = 'Certificate Authorities'
-        permissions = (("can_download", "Can download"))
+        permissions = (("can_download", "Can download"),)
 
     def __unicode__(self):
         return self.common_name
@@ -919,7 +919,7 @@ class Certificate(CertificateBase):
     class Meta:
         db_table = 'pki_certificate'
         verbose_name_plural = 'Certificates'
-        permissions = (("can_download", "Can download"))
+        permissions = (("can_download", "Can download"),)
         unique_together = (("name", "parent"), ("common_name", "parent"))
     
     def __unicode__(self):
@@ -1174,7 +1174,8 @@ class x509Extension(models.Model):
     basic_constraints_critical = models.BooleanField(default=True,
                                         verbose_name="Make basicConstraints \
                                                      critical")
-    key_usage = models.ManyToManyField("KeyUsage", verbose_name="keyUsage",
+    key_usage = models.ManyToManyField("KeyUsage", blank=True, null=True,
+                                       verbose_name="keyUsage",
                                        help_text="Usual values:<br />\
                                                 CA: keyCertSign, cRLsign<br />\
                                                 Cert: digitalSignature, \
@@ -1184,7 +1185,7 @@ class x509Extension(models.Model):
                                     verbose_name="Make keyUsage critical")
     extended_key_usage = models.ManyToManyField("ExtendedKeyUsage", blank=True,
                                                 null=True,
-                                               verbose_name="extendedKeyUsage",
+                                                verbose_name="extendedKeyUsage",
                                                 help_text="serverAuth - \
                                                           SSL/TLS Web Server \
                                                           Authentication<br />\
